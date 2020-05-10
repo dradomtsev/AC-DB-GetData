@@ -11,6 +11,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Net.Http;
+using Microsoft.AspNetCore.Http;
 
 namespace ArchiCAD.DB.WebAPI
 {
@@ -22,33 +24,37 @@ namespace ArchiCAD.DB.WebAPI
         }
 
         public IConfiguration Configuration { get; private set; }
+        ServicesExt.ArchiCADWebApiService ACService;
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IConfiguration>(Configuration);
-            services.AddHttpClient<ServicesExt.IArchiCADWebApiService, ServicesExt.ArchiCADWebApiService>();
+            ACService = new ServicesExt.ArchiCADWebApiService(Configuration);
+            //services.AddSingleton<ServicesExt.IArchiCADWebApiService>((ServicesExt.ArchiCADWebApiService)Configuration);
+
+            //services.AddScoped<Controllers.IArchiCADController, Controllers.ArchiCADController>();
+            //services.AddHttpClient<Controllers.IArchiCADController, Controllers.ArchiCADController>();
             services.AddControllers();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime applicationLifetime)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
-            app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+            applicationLifetime.ApplicationStopping.Register(OnShutdown);
+        }
+
+        private void OnShutdown()
+        {
+            ACService.Dispose();
         }
     }
 }
