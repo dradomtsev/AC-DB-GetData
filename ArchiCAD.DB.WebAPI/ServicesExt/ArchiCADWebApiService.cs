@@ -1,15 +1,13 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net.Http;
-
 using System.Threading;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
+
 using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Http;
 
 namespace ArchiCAD.DB.WebAPI.ServicesExt
 {
