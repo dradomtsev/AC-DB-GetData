@@ -5,14 +5,13 @@ using System.Threading.Tasks;
 
 namespace ArchiCAD.DB.WebAPI.Models.External
 {
-    public class AC_APIHealth_Response
+    public class AC_PropertyGuids_Response
     {
         public bool succeeded { get; set; }
-        public AC_APIHealth_Result result { get; set; }
+        public AC_PropertyGuids_Result result { get; set; }
     }
-
-    public class AC_APIHealth_Result
+    public class AC_PropertyGuids_Result
     {
-        public bool isAlive { get; set; }
+        public IList<AC_Property> properties { get; set; }
     }
 }

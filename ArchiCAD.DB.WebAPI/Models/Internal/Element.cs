@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ArchiCAD.DB.WebAPI.Models.Internal
 {
-    class Element
+    public class Element
     {
-        public Guid gGuid { get; set; }
+        public string gGuid { get; set; }
         public string sName { get; set; }
     }
 }
